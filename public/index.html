@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ConnectSphere — Social Media Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <!-- Lucide icons via unpkg -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+  <div class="app-container">
+    
+    <!-- LEFT SIDEBAR -->
+    <aside class="sidebar-left" id="sidebar-left">
+      <div class="sidebar-header">
+        <a href="#feed" class="brand-logo">
+          <div class="logo-icon">
+            <i data-lucide="zap"></i>
+          </div>
+          <span class="brand-name">ConnectSphere</span>
+        </a>
+      </div>
+
+      <nav class="nav-menu">
+        <a href="#feed" class="nav-item active" data-nav="feed">
+          <i data-lucide="home"></i>
+          <span class="nav-label">Home</span>
+        </a>
+        <a href="#explore" class="nav-item" data-nav="explore">
+          <i data-lucide="compass"></i>
+          <span class="nav-label">Explore</span>
+        </a>
+        <a href="#profile" class="nav-item auth-only" data-nav="profile">
+          <i data-lucide="user"></i>
+          <span class="nav-label">Profile</span>
+        </a>
+        <button id="theme-toggle-btn" class="nav-item theme-btn" title="Toggle Dark/Light Mode">
+          <i data-lucide="moon" id="theme-icon"></i>
+          <span class="nav-label" id="theme-label">Dark Mode</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-action">
+        <button id="sidebar-new-post-btn" class="btn btn-primary btn-block btn-lg auth-only">
+          <i data-lucide="feather"></i>
+          <span class="btn-text">New Post</span>
+        </button>
+        <button id="sidebar-login-btn" class="btn btn-outline btn-block btn-lg guest-only">
+          <i data-lucide="log-in"></i>
+          <span class="btn-text">Sign In</span>
+        </button>
+      </div>
+
+      <!-- Current User Mini Card -->
+      <div class="sidebar-user-section auth-only" id="current-user-card">
+        <div class="user-mini-info" id="user-mini-profile-trigger">
+          <img src="" alt="Avatar" class="avatar avatar-sm" id="sidebar-user-avatar">
+          <div class="user-mini-names">
+            <span class="display-name" id="sidebar-user-name">User</span>
+            <span class="username" id="sidebar-user-handle">@user</span>
+          </div>
+        </div>
+        <button id="logout-btn" class="icon-button" title="Log Out">
+          <i data-lucide="log-out"></i>
+        </button>
+      </div>
+
+      <!-- Guest Welcome Section -->
+      <div class="sidebar-guest-section guest-only">
+        <p class="guest-msg">Join Pulse today to share posts, follow creators, and join discussions!</p>
+      </div>
+    </aside>
+
+    <!-- CENTER MAIN COLUMN -->
+    <main class="main-content">
+      <!-- Sticky Top Header -->
+      <header class="top-header" id="top-header">
+        <div class="header-title-row">
+          <button class="icon-button mobile-menu-btn" id="mobile-menu-trigger">
+            <i data-lucide="menu"></i>
+          </button>
+          <h1 class="header-title" id="page-title">Home</h1>
+          <div class="header-actions" id="header-actions">
+            <!-- Dynamic context actions -->
+          </div>
+        </div>
+
+        <!-- Feed Tabs (Visible on Home Feed) -->
+        <div class="feed-tabs" id="feed-tabs">
+          <button class="feed-tab active" data-feed="all">For You</button>
+          <button class="feed-tab auth-only" data-feed="following">Following</button>
+        </div>
+      </header>
+
+      <!-- View Containers -->
+      <div class="content-body" id="content-body">
+        
+        <!-- Post Composer Box (Feed View) -->
+        <section class="composer-card auth-only" id="composer-section">
+          <div class="composer-avatar-col">
+            <img src="" alt="Your avatar" class="avatar" id="composer-user-avatar">
+          </div>
+          <div class="composer-main-col">
+            <textarea 
+              id="composer-text" 
+              class="composer-textarea" 
+              placeholder="What's happening in your world?" 
+              rows="3" 
+              maxlength="2000"></textarea>
+            
+            <!-- Image Preview Box -->
+            <div class="composer-image-preview hidden" id="composer-image-preview-container">
+              <img src="" alt="Preview" id="composer-preview-img">
+              <button class="preview-remove-btn" id="composer-remove-img-btn" title="Remove image">
+                <i data-lucide="x"></i>
+              </button>
+            </div>
+
+            <div class="composer-toolbar">
+              <div class="composer-tools">
+                <label class="icon-button tool-btn" title="Upload Image" for="composer-file-input">
+                  <i data-lucide="image"></i>
+                  <input type="file" id="composer-file-input" accept="image/*" class="file-input-hidden">
+                </label>
+                <button class="icon-button tool-btn" id="composer-img-url-btn" title="Add Image URL">
+                  <i data-lucide="link"></i>
+                </button>
+                <button class="icon-button tool-btn" id="composer-emoji-btn" title="Insert Emoji">
+                  <i data-lucide="smile"></i>
+                </button>
+              </div>
+
+              <div class="composer-submit-group">
+                <span class="char-counter" id="composer-char-count">2000</span>
+                <button class="btn btn-primary btn-sm" id="composer-submit-btn" disabled>
+                  <i data-lucide="send"></i>
+                  <span>Post</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Emoji Picker Dropdown -->
+            <div class="emoji-picker-dropdown hidden" id="emoji-picker">
+              <span class="emoji-opt">✨</span>
+              <span class="emoji-opt">🔥</span>
+              <span class="emoji-opt">🚀</span>
+              <span class="emoji-opt">💡</span>
+              <span class="emoji-opt">❤️</span>
+              <span class="emoji-opt">🙌</span>
+              <span class="emoji-opt">🎉</span>
+              <span class="emoji-opt">💻</span>
+              <span class="emoji-opt">🌍</span>
+              <span class="emoji-opt">☕</span>
+              <span class="emoji-opt">💯</span>
+              <span class="emoji-opt">🎯</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Dynamic Main Views Mount Point -->
+        <div id="view-mount-point">
+          <!-- Dynamic templates injected via JavaScript -->
+        </div>
+
+      </div>
+    </main>
+
+    <!-- RIGHT DISCOVERY SIDEBAR -->
+    <aside class="sidebar-right">
+      <!-- Search Input -->
+      <div class="search-widget">
+        <i data-lucide="search" class="search-icon"></i>
+        <input 
+          type="search" 
+          id="global-search-input" 
+          class="search-input" 
+          placeholder="Search Pulse posts & users...">
+      </div>
+
+      <!-- Who to Follow Widget -->
+      <section class="widget-card" id="suggested-users-widget">
+        <h3 class="widget-title">Who to Follow</h3>
+        <div class="widget-list" id="suggested-users-list">
+          <div class="skeleton-widget-item"></div>
+          <div class="skeleton-widget-item"></div>
+          <div class="skeleton-widget-item"></div>
+        </div>
+      </section>
+
+      <!-- Trending Hashtags Widget -->
+      <section class="widget-card" id="trending-widget">
+        <h3 class="widget-title">Trending Topics</h3>
+        <div class="widget-list" id="trending-list">
+          <div class="skeleton-widget-item"></div>
+          <div class="skeleton-widget-item"></div>
+        </div>
+      </section>
+
+      <!-- App Credits & Info -->
+      <footer class="app-footer">
+        <p>© 2026 ConnectSphere • Built with Express & Modern JS</p>
+        <p class="footer-links">
+          <a href="#feed">Terms</a> • <a href="#feed">Privacy</a> • <a href="#explore">Directory</a>
+        </p>
+      </footer>
+    </aside>
+
+  </div>
+
+  <!-- MOBILE BOTTOM NAVIGATION -->
+  <nav class="mobile-bottom-nav">
+    <a href="#feed" class="mobile-nav-item active" data-nav="feed">
+      <i data-lucide="home"></i>
+      <span>Home</span>
+    </a>
+    <a href="#explore" class="mobile-nav-item" data-nav="explore">
+      <i data-lucide="compass"></i>
+      <span>Explore</span>
+    </a>
+    <button class="mobile-nav-item mobile-create-btn auth-only" id="mobile-create-post-btn">
+      <i data-lucide="plus"></i>
+    </button>
+    <a href="#profile" class="mobile-nav-item auth-only" data-nav="profile">
+      <i data-lucide="user"></i>
+      <span>Profile</span>
+    </a>
+    <button class="mobile-nav-item guest-only" id="mobile-login-btn">
+      <i data-lucide="log-in"></i>
+      <span>Login</span>
+    </button>
+  </nav>
+
+  <!-- ================= MODALS ================= -->
+
+  <!-- 1. Authentication Modal -->
+  <div class="modal-overlay hidden" id="auth-modal">
+    <div class="modal-card auth-modal-card">
+      <div class="modal-header">
+        <div class="auth-tabs">
+          <button class="auth-tab-btn active" id="tab-login-btn">Sign In</button>
+          <button class="auth-tab-btn" id="tab-register-btn">Create Account</button>
+        </div>
+        <button class="icon-button close-modal-btn" id="close-auth-modal">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div class="auth-error-banner hidden" id="auth-error-banner"></div>
+
+        <!-- Login Form -->
+        <form id="login-form" class="auth-form">
+          <div class="form-group">
+            <label for="login-identifier">Username or Email</label>
+            <div class="input-with-icon">
+              <i data-lucide="mail"></i>
+              <input type="text" id="login-identifier" required placeholder="alex or alex@example.com">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="login-password">Password</label>
+            <div class="input-with-icon">
+              <i data-lucide="lock"></i>
+              <input type="password" id="login-password" required placeholder="••••••••">
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block btn-lg" id="login-submit-btn">
+            <span>Sign In</span>
+          </button>
+          <div class="quick-demo-login">
+            <button type="button" class="btn btn-subtle btn-block" id="demo-user-fill-btn">
+              ⚡ Demo Login (Alex Rivera)
+            </button>
+          </div>
+        </form>
+
+        <!-- Register Form -->
+        <form id="register-form" class="auth-form hidden">
+          <div class="form-group">
+            <label for="reg-name">Full Name</label>
+            <div class="input-with-icon">
+              <i data-lucide="user"></i>
+              <input type="text" id="reg-name" required placeholder="Sarah Connor">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="reg-username">Username</label>
+            <div class="input-with-icon">
+              <i data-lucide="at-sign"></i>
+              <input type="text" id="reg-username" required placeholder="sarah_c (alphanumeric)">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="reg-email">Email Address</label>
+            <div class="input-with-icon">
+              <i data-lucide="mail"></i>
+              <input type="email" id="reg-email" required placeholder="sarah@example.com">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="reg-password">Password</label>
+            <div class="input-with-icon">
+              <i data-lucide="lock"></i>
+              <input type="password" id="reg-password" required minlength="6" placeholder="At least 6 characters">
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block btn-lg" id="register-submit-btn">
+            <span>Create Account</span>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Edit Profile Modal -->
+  <div class="modal-overlay hidden" id="edit-profile-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2 class="modal-title">Edit Profile</h2>
+        <button class="icon-button close-modal-btn" id="close-edit-profile-modal">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="edit-profile-form">
+          <div class="profile-preview-strip">
+            <div class="cover-edit-box">
+              <img src="" alt="Cover" id="edit-cover-preview" class="edit-cover-img">
+              <button type="button" class="btn btn-sm btn-subtle edit-cover-btn" id="edit-cover-prompt-btn">
+                <i data-lucide="camera"></i> Change Cover URL
+              </button>
+            </div>
+            <div class="avatar-edit-box">
+              <img src="" alt="Avatar" id="edit-avatar-preview" class="avatar avatar-xl">
+              <label class="avatar-upload-overlay" for="edit-avatar-file-input" title="Upload avatar">
+                <i data-lucide="camera"></i>
+                <input type="file" id="edit-avatar-file-input" accept="image/*" class="file-input-hidden">
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="edit-profile-name">Display Name</label>
+            <input type="text" id="edit-profile-name" required maxlength="50" class="input-field">
+          </div>
+
+          <div class="form-group">
+            <label for="edit-profile-bio">Bio</label>
+            <textarea id="edit-profile-bio" rows="3" maxlength="200" class="input-field" placeholder="Tell the world about yourself..."></textarea>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="edit-profile-location">Location</label>
+              <input type="text" id="edit-profile-location" maxlength="50" class="input-field" placeholder="e.g. San Francisco, CA">
+            </div>
+            <div class="form-group">
+              <label for="edit-profile-website">Website</label>
+              <input type="url" id="edit-profile-website" maxlength="100" class="input-field" placeholder="https://example.com">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="edit-profile-avatar-url">Avatar Image URL (or upload above)</label>
+            <input type="url" id="edit-profile-avatar-url" class="input-field" placeholder="https://...">
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline" id="cancel-edit-profile-btn">Cancel</button>
+            <button type="submit" class="btn btn-primary" id="save-profile-btn">Save Changes</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Followers / Following List Modal -->
+  <div class="modal-overlay hidden" id="user-list-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2 class="modal-title" id="user-list-modal-title">Followers</h2>
+        <button class="icon-button close-modal-btn" id="close-user-list-modal">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+      <div class="modal-body user-list-body" id="user-list-modal-body">
+        <!-- Rendered list of users -->
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. Image Lightbox Modal -->
+  <div class="modal-overlay hidden image-lightbox-overlay" id="image-lightbox-modal">
+    <button class="icon-button lightbox-close-btn" id="close-lightbox-btn">
+      <i data-lucide="x"></i>
+    </button>
+    <div class="lightbox-img-wrapper">
+      <img src="" alt="Enlarged view" id="lightbox-img">
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Scripts -->
+  <script src="/js/state.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/components/composer.js"></script>
+  <script src="/js/components/comments.js"></script>
+  <script src="/js/components/feed.js"></script>
+  <script src="/js/components/profile.js"></script>
+  <script src="/js/router.js"></script>
+  <script src="/js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+{
+  "name": "connectsphere-social-media",
+  "version": "1.0.0",
+  "description": "ConnectSphere - Full-stack mini social media platform with user profiles, posts, comments, likes, and follows",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "seed": "node seed.js",
+    "test": "node test-e2e.js"
+  },
+  "keywords": [
+    "social-media",
+    "express",
+    "sqlite",
+    "javascript"
+  ],
+  "author": "CodeAlpha",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.5",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "multer": "^2.0.2",
+    "sqlite3": "^5.1.7"
+  }
+}
